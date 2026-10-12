@@ -63,7 +63,10 @@ jobs:
         with:
           cluster_name: ${{ env.CLUSTER }}
           location: ${{ env.REGION }}
-      - run: kubectl apply -f k8s/
+      # Namespace first: "kubectl apply -f k8s/" goes alphabetically (ingress before namespace).
+      - run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/ingress.yaml
 
   # Build, push and deploy each changed app in parallel.
   deploy:
